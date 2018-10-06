@@ -1,4 +1,4 @@
 .terraform/
 .idea/
 .envrc
-terraform.tfvarsqqq
+terraform.tfvars
