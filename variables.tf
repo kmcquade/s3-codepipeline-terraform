@@ -13,3 +13,7 @@ variable "application_development_s3_bucket_name" {
 variable "cloudtrail_s3_bucket_name" {
   type = "string"
 }
+variable "codepipeline_artifactstore_s3_bucket_name" {
+  type = "string"
+}
+

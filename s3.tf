@@ -91,3 +91,21 @@ resource "aws_s3_bucket_policy" "cloudtrail_s3_bucket_policy" {
   bucket = "${aws_s3_bucket.cloudtrail_s3_bucket.id}"
   policy = "${data.aws_iam_policy_document.cloudtrail_s3_bucket_policy.json}"
 }
+
+# S3 Bucket for CodePipeline ArtifactStore
+
+resource "aws_s3_bucket" "codepipeline_artifactstore_s3_bucket" {
+  bucket = "${var.codepipeline_artifactstore_s3_bucket_name}"
+  acl    = "private"
+
+  tags {
+    Name        = "codepipeline artifact store"
+    Environment = "${var.environment}"
+  }
+
+  force_destroy = true
+
+  versioning {
+    enabled = true
+  }
+}
