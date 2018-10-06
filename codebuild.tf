@@ -34,22 +34,32 @@ resource "aws_codebuild_project" "codebuild_project" {
 
 data "aws_iam_policy_document" "codebuild_iam_policy_document" {
   statement {
-    sid = "CloudWatchLogsPolicy"
+    sid    = "CreateLogStream"
+    effect = "Allow"
 
     actions = [
-      "logs:CreateLogGroup",
       "logs:CreateLogStream",
-      "logs:PutLogEvents",
     ]
 
     resources = [
-      // TODO restrict resources
-      "*",
+      "arn:aws:logs:${var.aws_region}:${local.aws_account_id}:log-group:/aws/codebuild/*",
     ]
   }
 
   statement {
-    sid = "S3GetObjectPolicy"
+    sid = "PutLogEvents"
+
+    actions = [
+      "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.aws_region}:${local.aws_account_id}:log-group:${aws_cloudwatch_log_group.codebuild_cloudwatch_log_group.name}:*",
+    ]
+  }
+
+  statement {
+    sid = "S3GetObjectFromArtifact"
 
     actions = [
       "s3:GetObject",
@@ -62,7 +72,7 @@ data "aws_iam_policy_document" "codebuild_iam_policy_document" {
   }
 
   statement {
-    sid = "S3PutObjectPolicy"
+    sid = "S3PutObjectToArtifact"
 
     actions = [
       "s3:PutObject",
